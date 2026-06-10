@@ -1,5 +1,5 @@
 # maifetch
-a really lazy fetch tool for [maitea](https://maitea.app) written in go\
+a really lazy fetch tool for [maitea](https://maitea.app) written in Elixir\
 also contains a little api wrapper for maitea too :D
 
 ![image](https://github.com/user-attachments/assets/96cd7018-8a00-4785-a1a8-9fe503263662)
@@ -23,13 +23,22 @@ obtained from `os.UserConfigDir`
 
 ## how to build
 1. clone the project with `git clone https://github.com/HutchyBen/maifetch`
-2. build with `go build maifetch/cmd/maifetch`
-3. run outputted executable ensuring access token is either
+2. install dependencies with `mix deps.get`
+3. run tests with `mix test`
+4. build with `mix escript.build`
+5. run outputted executable ensuring access token is either
     - in config file
     - in environment variables
     - in command line options
 
+```bash
+mix deps.get
+mix test
+mix escript.build
+./maifetch --access-token "$MAITEA_TOKEN"
+```
+
 
 ## todo
-- test it properly
+- replace the placeholder terminal logo with real image-to-ANSI rendering
 - add friendly errors
