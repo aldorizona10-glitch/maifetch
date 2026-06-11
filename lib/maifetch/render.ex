@@ -6,7 +6,9 @@ defmodule Maifetch.Render do
   def wide_to_normal(value) do
     value
     |> String.to_charlist()
-    |> Enum.map(fn code -> if code >= 0xFF01 and code <= 0xFF5E, do: code - 0xFEE0, else: code end)
+    |> Enum.map(fn code ->
+      if code >= 0xFF01 and code <= 0xFF5E, do: code - 0xFEE0, else: code
+    end)
     |> List.to_string()
   end
 
@@ -87,8 +89,13 @@ defmodule Maifetch.Render do
   end
 
   defp rating(nil), do: "0.00"
-  defp rating(value) when is_integer(value), do: :io_lib.format("~.2f", [value / 100]) |> IO.iodata_to_binary()
-  defp rating(value) when is_float(value), do: :io_lib.format("~.2f", [value / 100]) |> IO.iodata_to_binary()
+
+  defp rating(value) when is_integer(value),
+    do: :io_lib.format("~.2f", [value / 100]) |> IO.iodata_to_binary()
+
+  defp rating(value) when is_float(value),
+    do: :io_lib.format("~.2f", [value / 100]) |> IO.iodata_to_binary()
+
   defp rating(value), do: rating(String.to_integer(to_string(value)))
 
   defp ascii_logo(_url, size) do

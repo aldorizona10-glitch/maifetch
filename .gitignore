@@ -1,2 +1,6 @@
 .idea/
 *.exe
+*.deb
+/_build/
+/deps/
+/maifetch

@@ -18,14 +18,34 @@ defmodule Maifetch.Config do
 
   def load(argv \\ System.argv(), env \\ &System.get_env/1) do
     with {:ok, cli} <- parse_argv(argv),
-         path <- cli[:config_file] || first_env(env, ["MAITEA_CONFIG_FILE", "MAIFETCH_CONFIG_FILE"]) || default_config_path(),
+         path <-
+           cli[:config_file] || first_env(env, ["MAITEA_CONFIG_FILE", "MAIFETCH_CONFIG_FILE"]) ||
+             default_config_path(),
          {:ok, file} <- load_file_config(path),
-         {:ok, score_count} <- int_value(cli[:score_count] || first_env(env, ["MAITEA_SCORE_COUNT", "MAIFETCH_SCORE_COUNT"]) || file["scoreCount"] || 4, "score count"),
-         {:ok, logo_size} <- int_value(cli[:logo_size] || first_env(env, ["MAITEA_LOGO_SIZE", "MAIFETCH_LOGO_SIZE"]) || file["logoSize"] || 20, "logo size"),
-         token <- cli[:access_token] || first_env(env, ["MAITEA_TOKEN", "MAIFETCH_TOKEN"]) || file["accessToken"],
+         {:ok, score_count} <-
+           int_value(
+             cli[:score_count] || first_env(env, ["MAITEA_SCORE_COUNT", "MAIFETCH_SCORE_COUNT"]) ||
+               file["scoreCount"] || 4,
+             "score count"
+           ),
+         {:ok, logo_size} <-
+           int_value(
+             cli[:logo_size] || first_env(env, ["MAITEA_LOGO_SIZE", "MAIFETCH_LOGO_SIZE"]) ||
+               file["logoSize"] || 20,
+             "logo size"
+           ),
+         token <-
+           cli[:access_token] || first_env(env, ["MAITEA_TOKEN", "MAIFETCH_TOKEN"]) ||
+             file["accessToken"],
          :ok <- validate_token(token),
          :ok <- validate_score_count(score_count) do
-      {:ok, %__MODULE__{access_token: token, config_file: path, score_count: score_count, logo_size: logo_size}}
+      {:ok,
+       %__MODULE__{
+         access_token: token,
+         config_file: path,
+         score_count: score_count,
+         logo_size: logo_size
+       }}
     end
   end
 
@@ -111,7 +131,10 @@ defmodule Maifetch.Config do
         Path.join([System.user_home!(), "Library", "Application Support", "maifetch.json"])
 
       _ ->
-        Path.join(System.get_env("XDG_CONFIG_HOME") || Path.join(System.user_home!(), ".config"), "maifetch.json")
+        Path.join(
+          System.get_env("XDG_CONFIG_HOME") || Path.join(System.user_home!(), ".config"),
+          "maifetch.json"
+        )
     end
   end
 end

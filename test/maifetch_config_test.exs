@@ -10,7 +10,12 @@ defmodule Maifetch.ConfigTest do
       _ -> nil
     end
 
-    assert {:ok, config} = Config.load(["--access-token", "cli-token", "--score-count", "3", "--logo-size", "0"], env)
+    assert {:ok, config} =
+             Config.load(
+               ["--access-token", "cli-token", "--score-count", "3", "--logo-size", "0"],
+               env
+             )
+
     assert config.access_token == "cli-token"
     assert config.score_count == 3
     assert config.logo_size == 0

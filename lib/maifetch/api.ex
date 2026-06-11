@@ -12,12 +12,30 @@ defmodule Maifetch.API do
   def all_best_scores(token), do: get(token, "/api/v1/scores/all") |> unwrap_data()
 
   def get(token, path) do
+    Application.ensure_all_started(:inets)
+    Application.ensure_all_started(:ssl)
+
     url = @base_url <> path
 
-    case Req.get(url, auth: {:bearer, token}, headers: [{"accept", "application/json"}, {"content-type", "application/json"}], receive_timeout: 30_000) do
-      {:ok, %{status: status, body: body}} when status in 200..299 -> {:ok, body}
-      {:ok, %{status: status, body: body}} -> {:error, "MaiTea API returned HTTP #{status}: #{inspect(body)}"}
-      {:error, reason} -> {:error, "MaiTea API request failed: #{inspect(reason)}"}
+    headers = [
+      {~c"authorization", ~c"Bearer " ++ String.to_charlist(token)},
+      {~c"accept", ~c"application/json"},
+      {~c"content-type", ~c"application/json"}
+    ]
+
+    request = {String.to_charlist(url), headers}
+    options = [timeout: 30_000]
+    http_options = [body_format: :binary]
+
+    case :httpc.request(:get, request, options, http_options) do
+      {:ok, {{_, status, _}, _headers, body}} when status in 200..299 ->
+        Jason.decode(body)
+
+      {:ok, {{_, status, _}, _headers, body}} ->
+        {:error, "MaiTea API returned HTTP #{status}: #{body}"}
+
+      {:error, reason} ->
+        {:error, "MaiTea API request failed: #{inspect(reason)}"}
     end
   end
 
