@@ -17,7 +17,7 @@ defmodule Maifetch.API do
     case Req.get(url, auth: {:bearer, token}, headers: [{"accept", "application/json"}, {"content-type", "application/json"}], receive_timeout: 30_000) do
       {:ok, %{status: status, body: body}} when status in 200..299 -> {:ok, body}
       {:ok, %{status: status, body: body}} -> {:error, "MaiTea API returned HTTP #{status}: #{inspect(body)}"}
-      {:error, reason} -> {:error, "MaiTea API request failed: #{Exception.message(reason)}"}
+      {:error, reason} -> {:error, "MaiTea API request failed: #{inspect(reason)}"}
     end
   end
 

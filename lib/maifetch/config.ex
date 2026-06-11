@@ -32,8 +32,11 @@ defmodule Maifetch.Config do
   defp parse_argv(argv), do: parse_argv(argv, %{})
   defp parse_argv([], acc), do: {:ok, acc}
 
-  defp parse_argv([flag, value | rest], acc) when is_map_key(@aliases, flag) do
-    parse_argv(rest, Map.put(acc, @aliases[flag], value))
+  defp parse_argv([flag, value | rest], acc) do
+    case Map.fetch(@aliases, flag) do
+      {:ok, key} -> parse_argv(rest, Map.put(acc, key, value))
+      :error -> {:error, "unknown argument: #{flag}\n\n#{usage()}"}
+    end
   end
 
   defp parse_argv(["--help" | _], _acc), do: {:error, usage()}

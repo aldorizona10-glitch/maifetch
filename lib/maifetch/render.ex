@@ -1,7 +1,7 @@
 defmodule Maifetch.Render do
   @moduledoc false
 
-  def colour(value), do: IO.ANSI.color(72, 184, 200) <> value <> IO.ANSI.reset()
+  def colour(value), do: "\e[38;2;72;184;200m" <> value <> IO.ANSI.reset()
 
   def wide_to_normal(value) do
     value
