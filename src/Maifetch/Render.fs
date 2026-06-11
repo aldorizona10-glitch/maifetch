@@ -49,6 +49,11 @@ module Render =
 
     let infoLines profile plays scoreCount =
         let name = wideToNormal profile.Name
+        let idLabel = colour "ID"
+        let ratingLabel = colour "Rating"
+        let levelLabel = colour "Level"
+        let creditsLabel = colour "Total Credits"
+        let scoresLabel = colour "Recent Scores"
         let scoreLines =
             plays
             |> List.truncate scoreCount
@@ -60,11 +65,11 @@ module Render =
 
         [ colour name
           String.replicate name.Length "-"
-          $"{colour "ID"}: {profile.Id}"
-          $"{colour "Rating"}: {float profile.Rating / 100.0:F2} / {float profile.RatingHighest / 100.0:F2}"
-          $"{colour "Level"}: {profile.Level}"
-          $"{colour "Total Credits"}: {profile.PlayStats.Total}"
-          $"{colour "Recent Scores"}:" ]
+          $"{idLabel}: {profile.Id}"
+          $"{ratingLabel}: {float profile.Rating / 100.0:F2} / {float profile.RatingHighest / 100.0:F2}"
+          $"{levelLabel}: {profile.Level}"
+          $"{creditsLabel}: {profile.PlayStats.Total}"
+          $"{scoresLabel}:" ]
         @ scoreLines
 
     let printText profile plays scoreCount =

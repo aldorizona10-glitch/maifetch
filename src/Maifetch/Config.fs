@@ -28,22 +28,22 @@ module Config =
             let value = Environment.GetEnvironmentVariable(name)
             if String.IsNullOrWhiteSpace value then None else Some value)
 
-    let private parseInt value =
+    let private parseInt (value: string) =
         match Int32.TryParse value with
         | true, parsed -> Some parsed
         | false, _ -> None
 
-    let private applyConfigFile path config =
+    let private applyConfigFile (path: string) (config: Config) =
         if File.Exists path then
             use doc = JsonDocument.Parse(File.ReadAllText path)
             let root = doc.RootElement
 
-            let stringProp name fallback =
+            let stringProp (name: string) (fallback: string) =
                 match root.TryGetProperty name with
                 | true, value when value.ValueKind = JsonValueKind.String && not (String.IsNullOrWhiteSpace(value.GetString())) -> value.GetString()
                 | _ -> fallback
 
-            let intProp name fallback =
+            let intProp (name: string) (fallback: int) =
                 match root.TryGetProperty name with
                 | true, value when value.ValueKind = JsonValueKind.Number ->
                     match value.TryGetInt32() with
