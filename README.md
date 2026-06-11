@@ -1,5 +1,5 @@
 # maifetch
-a really lazy fetch tool for [maitea](https://maitea.app) written in go\
+a really lazy fetch tool for [maitea](https://maitea.app) rewritten in F#\
 also contains a little api wrapper for maitea too :D
 
 ![image](https://github.com/user-attachments/assets/96cd7018-8a00-4785-a1a8-9fe503263662)
@@ -23,11 +23,18 @@ obtained from `os.UserConfigDir`
 
 ## how to build
 1. clone the project with `git clone https://github.com/HutchyBen/maifetch`
-2. build with `go build maifetch/cmd/maifetch`
-3. run outputted executable ensuring access token is either
+2. build with `dotnet build Maifetch.sln --configuration Release`
+3. run with `dotnet run --project src/Maifetch/Maifetch.fsproj -- --access-token <token>`
+4. ensure access token is either
     - in config file
     - in environment variables
     - in command line options
+
+## testing
+```bash
+dotnet run --project tests/Maifetch.Tests/Maifetch.Tests.fsproj --configuration Release
+dotnet run --project src/Maifetch/Maifetch.fsproj -- --help
+```
 
 
 ## todo
